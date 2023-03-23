@@ -1,0 +1,20 @@
+program Money;
+
+uses
+  System.StartUpCopy,
+  FMX.Forms,
+  UnitLogin in 'UnitLogin.pas' {FrmLogin},
+  u99Permissions in 'Units\u99Permissions.pas',
+  UnitPrincipal in 'UnitPrincipal.pas' {FrmPrincipal},
+  UnitLancamentos in 'UnitLancamentos.pas' {FrmLancamentos},
+  UnitLancamentosCad in 'UnitLancamentosCad.pas' {FrmLancamentosCad},
+  UnitCategorias in 'UnitCategorias.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TFrmLogin, FrmLogin);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

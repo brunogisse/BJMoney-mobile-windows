@@ -6,7 +6,13 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Layouts,
   FMX.Objects, FMX.Controls.Presentation, FMX.Edit, FMX.StdCtrls, FMX.TabControl,
-  System.Actions, FMX.ActnList;
+  System.Actions, FMX.ActnList, u99Permissions, FMX.MediaLibrary.Actions,
+
+  {$IFDEF ANDROID}
+  FMX.Platform, FMX.VirtualKeyboard,
+  {$ENDIF}
+
+  FMX.StdActns;
 
 type
   TFrmLogin = class(TForm)
@@ -43,7 +49,7 @@ type
     Layout10: TLayout;
     c_escolher_foto: TCircle;
     Layout11: TLayout;
-    RoundRect8: TRoundRect;
+    rect_login: TRoundRect;
     Label3: TLabel;
     TabEscolherFoto: TTabItem;
     Layout12: TLayout;
@@ -69,17 +75,32 @@ type
     label_login_tabConta: TLabel;
     Label6: TLabel;
     Rectangle2: TRectangle;
+    ActLibrary: TTakePhotoFromLibraryAction;
+    ActCamera: TTakePhotoFromCameraAction;
     procedure label_login_contaClick(Sender: TObject);
     procedure label_login_tabContaClick(Sender: TObject);
     procedure rect_conta_proximoClick(Sender: TObject);
     procedure img_foto_voltarClick(Sender: TObject);
     procedure c_escolher_fotoClick(Sender: TObject);
     procedure img_escolherFoto_voltarClick(Sender: TObject);
-
-
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure img_fotoClick(Sender: TObject);
+    procedure img_libraryClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ActLibraryDidFinishTaking(Image: TBitmap);
+    procedure ActCameraDidFinishTaking(Image: TBitmap);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char;
+      Shift: TShiftState);
+    procedure RoundRect3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
     { Private declarations }
+    permissao : T99Permissions;
+    procedure TrataErroPermissao(Sender: TObject);
+
+
   public
     { Public declarations }
   end;
@@ -91,10 +112,88 @@ implementation
 
 {$R *.fmx}
 
+uses UnitPrincipal;
+
+
+procedure TFrmLogin.ActCameraDidFinishTaking(Image: TBitmap);
+begin
+  c_escolher_foto.Fill.Bitmap.Bitmap := Image;
+  ActFoto.Execute;
+end;
+
+procedure TFrmLogin.ActLibraryDidFinishTaking(Image: TBitmap);
+begin
+  c_escolher_foto.Fill.Bitmap.Bitmap := Image;
+  ActFoto.Execute;
+end;
 
 procedure TFrmLogin.c_escolher_fotoClick(Sender: TObject);
 begin
   ActEscolherFoto.Execute;
+end;
+
+procedure TFrmLogin.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+    Action := TCloseAction.caFree;
+    FrmLogin := nil;
+end;
+
+procedure TFrmLogin.FormCreate(Sender: TObject);
+begin
+  permissao := T99Permissions.Create;
+end;
+
+procedure TFrmLogin.FormDestroy(Sender: TObject);
+begin
+  permissao.DisposeOf;
+end;
+
+procedure TFrmLogin.FormKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char;
+  Shift: TShiftState);
+{$IFDEF ANDROID}
+  var
+    FService : IFMXVirtualKeyboardService;
+{$ENDIF}
+begin
+{$IFDEF ANDROID}
+     if (Key = vkHardwareBack) then
+     begin
+       TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService, IInterface(FService));
+          if (FService = nil) and (TVirtualKeyboardState.Visible in FService.VirtualKeyboardState) then
+              begin
+              //botão back pressionado e teclado visível...
+              //(apenas fecha o teclado)
+              end
+              else
+              begin
+                //botão back pressionado e teclado não visível...
+
+                if TabControl1.ActiveTab = TabConta then
+                  begin
+                   Key := 0; 
+                   ActLogin.Execute;
+                  end
+
+                else if TabControl1.ActiveTab = TabFoto then
+                  begin
+                   Key := 0; 
+                   ActConta.Execute; 
+                  end
+                   
+
+                else if TabControl1.ActiveTab = TabEscolherFoto then
+                begin
+                   Key := 0; 
+                   ActFoto.Execute; 
+                  end;                   
+          end;
+     end;
+{$ENDIF}
+end;
+
+procedure TFrmLogin.FormShow(Sender: TObject);
+begin
+  TabControl1.ActiveTab := TabLogin;
 end;
 
 procedure TFrmLogin.img_escolherFoto_voltarClick(Sender: TObject);
@@ -102,9 +201,24 @@ begin
   ActFoto.Execute;
 end;
 
+procedure TFrmLogin.TrataErroPermissao(Sender : TObject);
+begin
+  ShowMessage('Você não possui permissão para o acesso deste recurso');
+end;
+
+procedure TFrmLogin.img_fotoClick(Sender: TObject);
+begin
+  permissao.Camera(ActCamera, TrataErroPermissao);
+end;
+
 procedure TFrmLogin.img_foto_voltarClick(Sender: TObject);
 begin
   ActConta.Execute;
+end;
+
+procedure TFrmLogin.img_libraryClick(Sender: TObject);
+begin
+  permissao.PhotoLibrary(ActLibrary, TrataErroPermissao);
 end;
 
 procedure TFrmLogin.label_login_contaClick(Sender: TObject);
@@ -120,6 +234,16 @@ end;
 procedure TFrmLogin.rect_conta_proximoClick(Sender: TObject);
 begin
   ActFoto.Execute;
+end;
+
+procedure TFrmLogin.RoundRect3Click(Sender: TObject);
+begin
+     if NOT Assigned(FrmPrincipal) then
+       Application.CreateForm(TFrmPrincipal, FrmPrincipal);
+
+       Application.MainForm := FrmPrincipal;
+       FrmPrincipal.Show;
+       FrmLogin.Close;
 end;
 
 end.
