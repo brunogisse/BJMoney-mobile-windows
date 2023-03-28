@@ -3,27 +3,35 @@
 	<Transactions>
     <Transaction>2023/03/20 16:30:36.000.767,=C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2023/03/20 21:25:50.000.986,=C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>2023/03/20 21:29:49.000.898,C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitLogin.pas</Transaction>
-    <Transaction>2023/03/20 21:29:49.000.898,C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\UnitLogin.fmx</Transaction>
-    <Transaction>2023/03/20 21:30:12.000.042,C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Project1.dproj=C:\PROGRAMAS\mobile-financeiro\fontes\Money.dproj</Transaction>
+    <Transaction>2023/03/20 21:29:49.000.898,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLogin.fmx=C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.fmx</Transaction>
+    <Transaction>2023/03/20 21:29:49.000.898,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLogin.pas=C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2023/03/20 21:30:12.000.042,C:\PROGRAMAS\mobile-financeiro\fontes\Money.dproj=C:\Users\bruno\OneDrive\Documentos\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
     <Transaction>2023/03/21 13:58:43.000.513,=C:\PROGRAMAS\mobile-financeiro\fontes\Units\u99Permissions.pas</Transaction>
     <Transaction>2023/03/21 16:26:51.000.208,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
-    <Transaction>2023/03/21 16:28:04.000.818,C:\PROGRAMAS\mobile-financeiro\fontes\UnitPrincipal.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
-    <Transaction>2023/03/21 16:28:04.000.818,C:\PROGRAMAS\mobile-financeiro\fontes\UnitPrincipal.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx</Transaction>
+    <Transaction>2023/03/21 16:28:04.000.818,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\UnitPrincipal.fmx</Transaction>
+    <Transaction>2023/03/21 16:28:04.000.818,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitPrincipal.pas</Transaction>
     <Transaction>2023/03/22 14:40:16.000.875,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
-    <Transaction>2023/03/22 14:41:13.000.251,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentos.fmx</Transaction>
-    <Transaction>2023/03/22 14:41:13.000.251,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentos.pas</Transaction>
+    <Transaction>2023/03/22 14:41:13.000.251,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentos.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx</Transaction>
+    <Transaction>2023/03/22 14:41:13.000.251,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentos.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
     <Transaction>2023/03/22 19:07:39.000.987,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
-    <Transaction>2023/03/22 19:08:28.000.248,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentosCad.fmx</Transaction>
-    <Transaction>2023/03/22 19:08:28.000.248,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentosCad.pas</Transaction>
+    <Transaction>2023/03/22 19:08:28.000.248,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentosCad.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/22 19:08:28.000.248,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentosCad.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx</Transaction>
     <Transaction>2023/03/23 14:07:47.000.958,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
-    <Transaction>2023/03/23 14:08:27.000.333,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategorias.fmx</Transaction>
-    <Transaction>2023/03/23 14:08:27.000.333,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategorias.pas</Transaction>
+    <Transaction>2023/03/23 14:08:27.000.333,C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategorias.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/23 14:08:27.000.333,C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategorias.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx</Transaction>
     <Transaction>2023/03/23 15:18:51.000.465,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
-    <Transaction>2023/03/23 15:19:14.000.511,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategoriasCad.fmx</Transaction>
-    <Transaction>2023/03/23 15:19:14.000.511,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategoriasCad.pas</Transaction>
+    <Transaction>2023/03/23 15:19:14.000.511,C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategoriasCad.fmx=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.fmx</Transaction>
+    <Transaction>2023/03/23 15:19:14.000.511,C:\PROGRAMAS\mobile-financeiro\fontes\UnitCategoriasCad.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/23 19:43:34.000.390,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/23 19:43:56.000.483,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.dfm=C:\PROGRAMAS\mobile-financeiro\fontes\UnitDM.dfm</Transaction>
+    <Transaction>2023/03/23 19:43:56.000.483,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\UnitDM.pas</Transaction>
+    <Transaction>2023/03/25 10:51:05.000.131,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/25 11:07:44.000.241,C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Classes\cCategoria.pas</Transaction>
+    <Transaction>2023/03/27 09:12:30.000.661,=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/27 09:13:16.000.038,C:\PROGRAMAS\mobile-financeiro\fontes\Classes\cLancamento.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
+    <Transaction>2023/03/27 22:14:31.000.912,=C:\PROGRAMAS\mobile-financeiro\fontes\Units\uFormat.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
-		<NoProfile iOSSimulator="iPhone5" Android="4cc754a" Android64="4cc754a"/>
+		<NoProfile iOSSimulator="iPhone5" Android="4cc754a" Android64=""/>
 	</ActiveMobileDevice>
 </BorlandProject>

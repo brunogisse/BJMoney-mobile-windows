@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListView.Types,
-  FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView;
+  FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView,
+  FireDAC.Comp.Client, FireDAC.DApt, Data.DB;
 
 type
   TFrmCategorias = class(TForm)
@@ -15,7 +16,7 @@ type
     img_voltar: TImage;
     Rectangle1: TRectangle;
     Layout3: TLayout;
-    Label7: TLabel;
+    lbl_qtd_cat: TLabel;
     img_add: TImage;
     lv_categoria: TListView;
     procedure img_voltarClick(Sender: TObject);
@@ -28,9 +29,11 @@ type
       const AItem: TListViewItem);
   private
     procedure CadCategoria(id_cat: string);
+
     { Private declarations }
   public
     { Public declarations }
+    procedure ListarCategorias;
   end;
 
 var
@@ -40,21 +43,34 @@ implementation
 
 {$R *.fmx}
 
-uses UnitPrincipal, UnitCategoriasCad;
+uses UnitPrincipal, UnitCategoriasCad, cCategoria, UnitDM;
+
+procedure TFrmCategorias.lv_categoriaItemClick(const Sender: TObject;
+  const AItem: TListViewItem);
+begin
+    CadCategoria(AItem.TagString);
+end;
 
 procedure TFrmCategorias.CadCategoria(id_cat: string);
 begin
   if NOT Assigned(FrmCategoriasCad) then
-         Application.CreateForm(TFrmCategoriasCad, FrmCategoriasCad);
+     Application.CreateForm(TFrmCategoriasCad, FrmCategoriasCad);
 
-         id_cat := TagString;
+     if id_cat = '' then
+     begin
+        FrmCategoriasCad.id_cat := 0;
+        FrmCategoriasCad.modo := 'I';
+        FrmCategoriasCad.lbl_titulo.text := 'Nova Categoria'
+     end
 
-         if id_cat = '' then
-            FrmCategoriasCad.lbl_titulo.text := 'Nova Categoria'
-         else
-            FrmCategoriasCad.lbl_titulo.text := 'Editar Categoria';
+     else
+     begin
+        FrmCategoriasCad.id_cat := id_cat.ToInteger;
+        FrmCategoriasCad.modo := 'A';
+        FrmCategoriasCad.lbl_titulo.text := 'Editar Categoria'
+     end;
 
-         FrmCategoriasCad.Show;
+     FrmCategoriasCad.Show;
 end;
 
 procedure TFrmCategorias.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -63,22 +79,50 @@ begin
     FrmCategorias := nil;
 end;
 
-procedure TFrmCategorias.FormShow(Sender: TObject);
-  var
-    foto : TStream;
-    i : integer;
+procedure TFrmCategorias.ListarCategorias;
+var
+    cat   : TCategoria;
+    qry   : TFDQuery;
+    erro  : string;
+    icone : TStream;
 begin
-    foto := TMemoryStream.Create;
-    FrmPrincipal.img_categoria.Bitmap.SaveToStream(foto);
-    foto.Position := 0;
+   try
+      lv_categoria.Items.Clear;
+      cat := TCategoria.Create(dm.conn);
+      qry := cat.ListarCategoria(erro);
 
-    for i := 1 to 6 do
-        FrmPrincipal.AddCategoria( lv_categoria,
-                       '00001',
-                       'Transporte',
-                        foto);
+     while not qry.Eof do
+      begin
+        if qry.FieldByName('ICONE').AsString <> '' then
+           icone := qry.CreateBlobStream(qry.FieldByName('ICONE'), TBlobStreamMode.bmRead)
+        else
+           icone := nil;
+           FrmPrincipal.AddCategoria( lv_categoria,
+                                      qry.FieldByName('ID_CATEGORIA').AsString,
+                                      qry.FieldByName('DESCRICAO').AsString,
+                                      icone );
+       if icone <> nil then
+          icone.DisposeOf;
 
-    foto.DisposeOf;
+          qry.Next;
+      end;
+
+      case lv_categoria.Items.Count of
+         0: lbl_qtd_cat.Text := 'Nenhuma Categoria';
+         1: lbl_qtd_cat.Text := lv_categoria.Items.Count.ToString + ' Categoria';
+       else
+         lbl_qtd_cat.Text := lv_categoria.Items.Count.ToString + ' Categorias';
+      end;
+
+   finally
+        qry.DisposeOf;
+        cat.DisposeOf;
+   end;
+end;
+
+procedure TFrmCategorias.FormShow(Sender: TObject);
+begin
+    ListarCategorias;
 end;
 
 procedure TFrmCategorias.img_addClick(Sender: TObject);
@@ -89,12 +133,6 @@ end;
 procedure TFrmCategorias.img_voltarClick(Sender: TObject);
 begin
     Close;
-end;
-
-procedure TFrmCategorias.lv_categoriaItemClick(const Sender: TObject;
-  const AItem: TListViewItem);
-begin
-    CadCategoria(AItem.TagString);
 end;
 
 procedure TFrmCategorias.lv_categoriaUpdateObjects(const Sender: TObject;

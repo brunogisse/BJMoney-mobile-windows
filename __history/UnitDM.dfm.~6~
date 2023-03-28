@@ -1,0 +1,15 @@
+object dm: Tdm
+  OldCreateOrder = False
+  Height = 407
+  Width = 551
+  object conn: TFDConnection
+    Params.Strings = (
+      'Database=C:\PROGRAMAS\mobile-financeiro\fontes\DB\banco.db'
+      'OpenMode=ReadWrite'
+      'LockingMode=Normal'
+      'DriverID=SQLite')
+    LoginPrompt = False
+    Left = 144
+    Top = 120
+  end
+end
