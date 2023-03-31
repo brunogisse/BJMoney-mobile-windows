@@ -32,11 +32,12 @@ type
     img_hoje: TImage;
     img_ontem: TImage;
     rect_delete: TRectangle;
-    img_add: TImage;
+    img_delete: TImage;
     img_tipo_lancamento: TImage;
     img_despesa: TImage;
     img_receita: TImage;
-    cmb_categoria: TComboBox;
+    lbl_categoria: TLabel;
+    Image1: TImage;
     procedure img_voltarClick(Sender: TObject);
     procedure img_tipo_lancamentoClick(Sender: TObject);
     procedure img_hojeClick(Sender: TObject);
@@ -44,6 +45,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure img_saveClick(Sender: TObject);
     procedure edt_valorTyping(Sender: TObject);
+    procedure img_deleteClick(Sender: TObject);
+    procedure lbl_categoriaClick(Sender: TObject);
   private
     procedure ComboCategoria;
     function TrataValor(str: string): double;
@@ -63,7 +66,8 @@ implementation
 
 {$R *.fmx}
 
-uses UnitPrincipal, UnitCategorias, UnitDM, cCategoria, cLancamento, uFormat;
+uses UnitPrincipal, UnitCategorias, UnitDM, cCategoria, cLancamento, uFormat,
+  UnitComboCategoria;
 
 procedure TFrmLancamentosCad.ComboCategoria;
 var
@@ -71,7 +75,7 @@ var
     erro      : string;
     qry       : TFDQuery;
 begin
-    try
+    {try
         cmb_categoria.Items.Clear;
         categoria := TCategoria.Create(dm.conn); //categoria é um objeto instanciado da classe TCategoria.
         qry := categoria.ListarCategoria(erro);
@@ -96,7 +100,7 @@ begin
     finally
         categoria.DisposeOf;
         qry.DisposeOf;
-    end;
+    end;   }
 end;
 
 procedure TFrmLancamentosCad.edt_valorTyping(Sender: TObject);
@@ -120,6 +124,8 @@ begin
         img_tipo_lancamento.Bitmap := img_despesa.Bitmap;
         img_tipo_lancamento.Tag := -1;
         rect_delete.Visible := False;
+        lbl_categoria.Text := '';
+        lbl_categoria.Tag := 0;
     end
     else
     begin
@@ -154,7 +160,9 @@ begin
                img_tipo_lancamento.Tag := 1;
             end;
 
-            cmb_categoria.ItemIndex := cmb_categoria.Items.IndexOf(qry.FieldByName('DESCRICAO_CATEGORIA').AsString);
+         //   cmb_categoria.ItemIndex := cmb_categoria.Items.IndexOf(qry.FieldByName('DESCRICAO_CATEGORIA').AsString);
+            lbl_categoria.Text := qry.FieldByName('DESCRICAO_CATEGORIA').AsString;
+            lbl_categoria.Tag := qry.FieldByName('ID_CATEGORIA').AsInteger;
             rect_delete.Visible := True;
 
         finally
@@ -162,6 +170,41 @@ begin
             qry.DisposeOf;
         end;
     end;
+end;
+
+procedure TFrmLancamentosCad.img_deleteClick(Sender: TObject);
+var
+    lancamento  : TLancamento;
+    erro : string;
+begin
+    TDialogService.MessageDialog( 'Confirma a esclusão do lançamento ?' ,
+                                   TMsgDlgType.mtConfirmation,
+                                   [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo],
+                                   TMsgDlgBtn.mbNo, 0,
+    procedure(const AResult: TModalResult)
+    var
+        erro: string;
+    begin
+        if AResult = mrYes then
+        begin
+           try
+              lancamento := TLancamento.Create(dm.conn);
+              lancamento.ID_LANCAMENTO := id_lanc;
+
+              if NOT lancamento.Excluir(erro) then
+              begin
+                  ShowMessage(erro);
+                  Exit;
+              end;
+
+              Close;
+
+            finally
+                lancamento.DisposeOf;
+            end;
+        end;
+    end);
+
 end;
 
 procedure TFrmLancamentosCad.img_hojeClick(Sender: TObject);
@@ -196,7 +239,10 @@ begin
         lancamento := TLancamento.Create(dm.conn);
         lancamento.DESCRICAO := edt_descricao.Text;
         lancamento.VALOR := TrataValor(edt_valor.Text) * img_tipo_lancamento.Tag;
-        lancamento.ID_CATEGORIA := Integer(cmb_categoria.Items.Objects[cmb_categoria.ItemIndex]);
+
+        //lancamento.ID_CATEGORIA := Integer(cmb_categoria.Items.Objects[cmb_categoria.ItemIndex]);
+
+        lancamento.ID_CATEGORIA := lbl_categoria.Tag;
         lancamento.DATA_LANCAMENTO := dt_lancamento.Date;
 
         if modo = 'I' then
@@ -238,6 +284,25 @@ end;
 procedure TFrmLancamentosCad.img_voltarClick(Sender: TObject);
 begin
     Close;
+end;
+
+procedure TFrmLancamentosCad.lbl_categoriaClick(Sender: TObject);
+begin
+    //Abre listagem das categorias...
+
+    if not Assigned( FrmComboCategoria ) then
+        application.CreateForm( TFrmComboCategoria, FrmComboCategoria );
+
+    FrmComboCategoria.ShowModal( procedure ( ModalResult : TModalResult )
+    begin
+        if FrmComboCategoria.idCategoriaSelecao > 0 then
+        begin
+            lbl_categoria.Text := FrmComboCategoria.CategoriaSelecao;
+            lbl_categoria.Tag  := FrmComboCategoria.IdcategoriaSelecao;
+        end;
+
+    end);
+
 end;
 
 end.

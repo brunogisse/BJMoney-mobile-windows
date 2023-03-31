@@ -7,27 +7,27 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Layouts,
   FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls, FMX.ListView.Types,
   FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView, FMX.Ani,
-  Firedac.Comp.Client, FireDAC.DApt, Data.DB;
+  Firedac.Comp.Client, FireDAC.DApt, Data.DB, System.DateUtils;
 
 type
   TFrmPrincipal = class(TForm)
     Layout1: TLayout;
     img_menu: TImage;
-    Circle1: TCircle;
+    c_icone: TCircle;
     Image1: TImage;
     Label1: TLabel;
     Layout2: TLayout;
-    Label2: TLabel;
+    lbl_saldo: TLabel;
     Label3: TLabel;
     Layout3: TLayout;
     Layout4: TLayout;
     Layout5: TLayout;
     Image2: TImage;
-    Label4: TLabel;
+    lbl_receitas: TLabel;
     Label5: TLabel;
     Layout6: TLayout;
     Image3: TImage;
-    Label6: TLabel;
+    lbl_despesas: TLabel;
     Label7: TLabel;
     Rectangle1: TRectangle;
     Image4: TImage;
@@ -44,6 +44,8 @@ type
     img_fechar_menu: TImage;
     layout_menu_cat: TLayout;
     Label9: TLabel;
+    layout_menu_logoff: TLayout;
+    Label10: TLabel;
     procedure FormShow(Sender: TObject);
     procedure lv_lancamentoUpdateObjects(const Sender: TObject;
       const AItem: TListViewItem);
@@ -60,12 +62,18 @@ type
     procedure Image4Click(Sender: TObject);
     procedure lv_lancamentoItemClick(const Sender: TObject;
       const AItem: TListViewItem);
+    procedure layout_menu_logoffClick(Sender: TObject);
   private
+
     procedure ListarUltimosLancamentos;
+    procedure Dashboard;
+    procedure CarregarIcone;
 
     { Private declarations }
   public
     { Public declarations }
+
+    PosicaoFoto : Integer;
 
     procedure SetupLancamento(lv : TListView; Item: TListViewItem);
     procedure SetupCategoria(lv: TListView; Item: TListViewItem);
@@ -89,7 +97,8 @@ implementation
 
 {$R *.fmx}
 
-uses UnitLancamentos, UnitCategorias, cLancamento, UnitDM, UnitLancamentosCad;
+uses UnitLancamentos, UnitCategorias, cLancamento, UnitDM, UnitLancamentosCad,
+  cUsuario, UnitLogin;
 
 //***************** UNIT DE FUNÇÕES GLOBAIS *********************************
 
@@ -101,6 +110,8 @@ procedure TFrmPrincipal.AddLancamento( listview : TListView;
   var
     bmp : TBitmap;
 begin
+
+
     with listview.Items.Add do
     begin
 
@@ -108,8 +119,17 @@ begin
 
         TListItemText(Objects.FindDrawable('TxtDescricao')).Text := descricao;
         TListItemText(Objects.FindDrawable('TxtCategoria')).Text := categoria;
+
+      {  if valor < 0 then
+           TListItemText(Objects.FindDrawable('TxtValor')).TextColor := $FFFF5733
+        else
+           TListItemText(Objects.FindDrawable('TxtValor')).TextColor := $FF5863CD;
+      }
         TListItemText(Objects.FindDrawable('TxtValor')).Text := FormatFloat('#,##0.00', valor);
+
+
         TListItemText(Objects.FindDrawable('TxtData')).Text := FormatDateTime('dd/mm', dt);
+
 
         if foto <> nil then
         begin
@@ -177,6 +197,81 @@ end;
 
 
 //***************************************************************************
+
+procedure TFrmPrincipal.CarregarIcone;
+var
+    usuario : TUsuario;
+    qry     : TFDQuery;
+    erro    : string;
+    foto    : TStream;
+begin
+    try
+        usuario := TUsuario.Create(dm.conn);
+        qry     := usuario.ListarUsuario(erro);
+
+        if qry.FieldByName('FOTO').AsString <> '' then
+            foto := qry.CreateBlobStream(qry.FieldByName('FOTO'), TBlobStreamMode.bmRead)
+           else
+            foto := nil;
+
+        if foto <> nil then
+        begin
+           c_icone.Fill.Bitmap.Bitmap.LoadFromStream(foto);
+           foto.DisposeOf;
+        end;
+
+    finally
+        usuario.DisposeOf;
+        qry.DisposeOf;
+    end;
+
+end;
+
+procedure TFrmPrincipal.Dashboard;
+var
+    lancamento : TLancamento;
+    qry        : TFDQuery;
+    erro       : string;
+
+    vl_receita,
+    vl_despesa : double;
+begin
+    try
+        lancamento := TLancamento.Create(dm.conn);
+        lancamento.DATA_DE  := FormatDateTime('YYYY-MM-DD', StartOfTheMonth(Date));
+        lancamento.DATA_ATE := FormatDateTime('YYYY-MM-DD', EndOfTheMonth(Date));
+        qry := lancamento.ListarLancamento(0, erro);
+
+        if erro <> '' then
+        begin
+            ShowMessage(erro);
+            Exit;
+        end;
+
+        vl_receita := 0;
+        vl_despesa := 0;
+
+        while not qry.Eof do
+        begin
+            if qry.FieldByName('VALOR').AsFloat > 0 then
+                vl_receita := vl_receita + qry.FieldByName('VALOR').AsFloat
+               else
+                vl_despesa := vl_despesa + qry.FieldByName('VALOR').AsFloat;
+
+            qry.Next;
+        end;
+
+        lbl_receitas.Text := FormatFloat('#,##0.00', vl_receita);
+        lbl_despesas.Text := FormatFloat('#,##0.00', vl_despesa);
+        lbl_saldo.Text := FormatFloat('#,##0.00', vl_receita + vl_despesa);
+
+    finally
+        qry.DisposeOf;
+        lancamento.DisposeOf;
+    end;
+
+end;
+
 procedure TFrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
@@ -185,6 +280,9 @@ begin
          Frmlancamentos.DisposeOf;
          Frmlancamentos := nil;
        end;
+
+    Action := TCloseAction.caFree;
+    FrmPrincipal := nil;
 
 end;
 
@@ -237,11 +335,14 @@ begin
         lanc.DisposeOf;
     end;
 
+    Dashboard;
+
 end;
 
 procedure TFrmPrincipal.FormShow(Sender: TObject);
 begin
     ListarUltimosLancamentos;
+    CarregarIcone;
 end;
 
 procedure TFrmPrincipal.Image4Click(Sender: TObject);
@@ -279,11 +380,41 @@ begin
            FrmCategorias.Show;
 end;
 
+procedure TFrmPrincipal.layout_menu_logoffClick(Sender: TObject);
+var
+    usuario : TUsuario;
+    erro : string;
+begin
+    try
+        usuario := TUsuario.Create(dm.conn);
+
+        if not usuario.LogOut(erro) then
+        begin
+          ShowMessage(erro);
+          Exit;
+        end;
+
+    finally
+        usuario.DisposeOf;
+    end;
+
+    if NOT Assigned( FrmLogin ) then
+       Application.CreateForm(TFrmLogin, FrmLogin);
+
+       Application.MainForm := FrmLogin;
+       FrmLogin.Show;
+       FrmPrincipal.Close;
+
+end;
+
 procedure TFrmPrincipal.lbl_todos_lancClick(Sender: TObject);
 begin
     if NOT Assigned(FrmLancamentos) then
            Application.CreateForm(TFrmLancamentos, FrmLancamentos);
-           FrmLancamentos.show;
+           FrmLancamentos.ShowModal( procedure( ModalResult : TModalResult )
+                                   begin
+                                      ListarUltimosLancamentos;
+                                   end);;
 end;
 
 procedure TFrmPrincipal.lv_lancamentoItemClick(const Sender: TObject;

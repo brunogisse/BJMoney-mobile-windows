@@ -13,7 +13,10 @@ uses
   UnitDM in 'UnitDM.pas' {dm: TDataModule},
   cCategoria in 'Classes\cCategoria.pas',
   cLancamento in 'Classes\cLancamento.pas',
-  uFormat in 'Units\uFormat.pas';
+  uFormat in 'Units\uFormat.pas',
+  cUsuario in 'Classes\cUsuario.pas',
+  UnitComboCategoria in 'UnitComboCategoria.pas' {FrmComboCategoria},
+  UnitLancamentosResumo in 'UnitLancamentosResumo.pas' {FrmLancamentosResumo};
 
 {$R *.res}
 
@@ -21,5 +24,7 @@ begin
   Application.Initialize;
   Application.CreateForm(Tdm, dm);
   Application.CreateForm(TFrmLogin, FrmLogin);
+  Application.CreateForm(TFrmComboCategoria, FrmComboCategoria);
+  Application.CreateForm(TFrmLancamentosResumo, FrmLancamentosResumo);
   Application.Run;
 end.

@@ -26,6 +26,7 @@ type
         property DATA_ATE : string read FDATA_ATE write FDATA_ATE;
         property DESCRICAO    : string read FDESCRICAO write FDESCRICAO;
 
+        function ListarResumo(qtd_result: Integer; out erro: string): TFDQuery;
         function ListarLancamento(qtd_result : Integer; out erro : string) : TFDQuery;
         function Inserir(out erro : string) : Boolean;
         function Alterar(out erro: string): Boolean;
@@ -40,6 +41,41 @@ constructor TLancamento.Create(conn: TFDConnection);
 begin
     Fconn := conn;
 end;
+
+function TLancamento.ListarResumo(qtd_result : Integer; out erro: string): TFDQuery;
+var
+    qry : TFDQuery;
+begin
+    try
+        qry := TFDQuery.Create(nil);
+        qry.Connection := Fconn;
+
+        with qry do
+        begin
+            Active := False;
+            SQL.Clear;
+
+            SQL.Add( 'SELECT C.ICONE, C.DESCRICAO, CAST(SUM(L.VALOR) AS REAL) AS VALOR           ');
+            SQL.Add( 'FROM TAB_LANCAMENTO L                                                      ');
+            SQL.Add( 'JOIN TAB_CATEGORIA C ON (C.ID_CATEGORIA = L.ID_CATEGORIA)                  ');
+            SQL.Add( 'WHERE L.DATA BETWEEN ' + QuotedStr(DATA_DE) + ' AND ' + QuotedStr(DATA_ATE) );
+            SQL.Add( 'GROUP BY C.ICONE, C.DESCRICAO                                              ');
+            SQL.Add( 'ORDER BY 2                                                                 ');
+            Active := True;
+        end;
+
+        Result := qry;
+        erro := '';
+
+    except
+        on E : exception do
+        begin
+           Result := nil;
+           erro   := 'Erro ao consultar os lançamentos: ' + E.Message;
+        end;
+    end;
+end;
+
 
 function TLancamento.ListarLancamento(qtd_result : Integer; out erro: string): TFDQuery;
 var
