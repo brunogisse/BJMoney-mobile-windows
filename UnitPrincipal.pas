@@ -24,7 +24,6 @@ type
     Layout5: TLayout;
     Image2: TImage;
     lbl_receitas: TLabel;
-    Label5: TLabel;
     Layout6: TLayout;
     Image3: TImage;
     lbl_despesas: TLabel;
@@ -46,6 +45,10 @@ type
     Label9: TLabel;
     layout_menu_logoff: TLayout;
     Label10: TLabel;
+    img_saldo_visivel: TImage;
+    label5: TLabel;
+    img_closed_eye: TImage;
+    img_open_eye: TImage;
     procedure FormShow(Sender: TObject);
     procedure lv_lancamentoUpdateObjects(const Sender: TObject;
       const AItem: TListViewItem);
@@ -63,11 +66,13 @@ type
     procedure lv_lancamentoItemClick(const Sender: TObject;
       const AItem: TListViewItem);
     procedure layout_menu_logoffClick(Sender: TObject);
+    procedure img_saldo_visivelClick(Sender: TObject);
   private
 
     procedure ListarUltimosLancamentos;
     procedure Dashboard;
     procedure CarregarIcone;
+    procedure VisibilidadeSaldo;
 
     { Private declarations }
   public
@@ -343,6 +348,7 @@ procedure TFrmPrincipal.FormShow(Sender: TObject);
 begin
     ListarUltimosLancamentos;
     CarregarIcone;
+    VisibilidadeSaldo;
 end;
 
 procedure TFrmPrincipal.Image4Click(Sender: TObject);
@@ -356,6 +362,29 @@ if NOT Assigned(FrmLancamentosCad) then
                   begin
                       ListarUltimosLancamentos;
                   end);
+end;
+
+procedure TFrmPrincipal.VisibilidadeSaldo;
+begin
+    lbl_receitas.Visible := not lbl_receitas.Visible;
+    lbl_despesas.Visible := not lbl_despesas.Visible;
+    lbl_saldo.Visible := not lbl_saldo.Visible;
+
+    if img_saldo_visivel.Tag = 1 then
+      begin
+        img_saldo_visivel.Bitmap := img_closed_eye.Bitmap;
+        img_saldo_visivel.Tag := 0;
+      end
+    else
+      begin
+        img_saldo_visivel.Bitmap := img_open_eye.Bitmap;
+        img_saldo_visivel.Tag := 1;
+      end;
+end;
+
+procedure TFrmPrincipal.img_saldo_visivelClick(Sender: TObject);
+begin
+    VisibilidadeSaldo;
 end;
 
 procedure TFrmPrincipal.img_fechar_menuClick(Sender: TObject);

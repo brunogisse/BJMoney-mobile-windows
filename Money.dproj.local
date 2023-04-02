@@ -40,6 +40,6 @@
     <Transaction>2023/03/29 18:28:27.000.445,C:\PROGRAMAS\mobile-financeiro\fontes\UnitLancamentosResumo.pas=C:\PROGRAMAS\mobile-financeiro\fontes\Unit1.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
-		<NoProfile iOSSimulator="iPhone5" Android="" Android64=""/>
+		<NoProfile iOSSimulator="iPhone5" Android="4cc754a" Android64=""/>
 	</ActiveMobileDevice>
 </BorlandProject>
