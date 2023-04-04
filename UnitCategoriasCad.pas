@@ -61,6 +61,18 @@ type
     procedure FormShow(Sender: TObject);
     procedure img_saveClick(Sender: TObject);
     procedure img_deleteClick(Sender: TObject);
+    procedure img_saveMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_saveMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_voltarMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_voltarMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_deleteMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_deleteMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
     icone_selecionado : TBitmap;
     procedure SelecionaIcone(img: Timage);
@@ -174,6 +186,18 @@ begin
 
 end;
 
+procedure TFrmCategoriasCad.img_deleteMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmCategoriasCad.img_deleteMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmCategoriasCad.img_saveClick(Sender: TObject);
 var
     cat  : TCategoria;
@@ -208,9 +232,33 @@ begin
     end;
 end;
 
+procedure TFrmCategoriasCad.img_saveMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmCategoriasCad.img_saveMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmCategoriasCad.img_voltarClick(Sender: TObject);
 begin
     Close;
+end;
+
+procedure TFrmCategoriasCad.img_voltarMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmCategoriasCad.img_voltarMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 end.

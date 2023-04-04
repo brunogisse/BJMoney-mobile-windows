@@ -24,7 +24,5 @@ begin
   Application.Initialize;
   Application.CreateForm(Tdm, dm);
   Application.CreateForm(TFrmLogin, FrmLogin);
-  Application.CreateForm(TFrmComboCategoria, FrmComboCategoria);
-  Application.CreateForm(TFrmLancamentosResumo, FrmLancamentosResumo);
   Application.Run;
 end.

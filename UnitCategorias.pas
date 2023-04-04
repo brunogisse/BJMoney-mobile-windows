@@ -27,6 +27,14 @@ type
     procedure img_addClick(Sender: TObject);
     procedure lv_categoriaItemClick(const Sender: TObject;
       const AItem: TListViewItem);
+    procedure img_voltarMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_voltarMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_addMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_addMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
     procedure CadCategoria(id_cat: string);
 
@@ -130,9 +138,33 @@ begin
     CadCategoria('');
 end;
 
+procedure TFrmCategorias.img_addMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmCategorias.img_addMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmCategorias.img_voltarClick(Sender: TObject);
 begin
     Close;
+end;
+
+procedure TFrmCategorias.img_voltarMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmCategorias.img_voltarMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmCategorias.lv_categoriaUpdateObjects(const Sender: TObject;

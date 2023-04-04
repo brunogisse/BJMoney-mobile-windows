@@ -22,6 +22,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure img_voltarClick(Sender: TObject);
+    procedure img_voltarMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_voltarMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
 
     procedure MontarResumo;
@@ -129,6 +133,18 @@ end;
 procedure TFrmLancamentosResumo.img_voltarClick(Sender: TObject);
 begin
     Close;
+end;
+
+procedure TFrmLancamentosResumo.img_voltarMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLancamentosResumo.img_voltarMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 end.

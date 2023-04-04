@@ -41,6 +41,26 @@ type
     procedure img_proximoClick(Sender: TObject);
     procedure img_anteriorClick(Sender: TObject);
     procedure Image1Click(Sender: TObject);
+    procedure img_anteriorMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_anteriorMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_proximoMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_proximoMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_addMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_addMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_voltarMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_voltarMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
 
     dt_filtro : TDate;
@@ -111,7 +131,7 @@ begin
         lanc          := TLancamento.Create(dm.conn);
         lanc.DATA_DE  := FormatDateTime('YYYY-MM-DD', StartOfTheMonth(dt_filtro));
         lanc.DATA_ATE := FormatDateTime('YYYY-MM-DD', EndOfTheMonth(dt_filtro));
-        qry           := lanc.ListarLancamento(0, erro);
+        qry           := lanc.ListarLancamento(0, 0, erro);
 
         if  erro <> '' then
         begin
@@ -174,9 +194,33 @@ begin
         FrmLancamentosResumo.Show;
 end;
 
+procedure TFrmLancamentos.Image1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
+procedure TFrmLancamentos.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmLancamentos.img_addClick(Sender: TObject);
 begin
     AbrirLancamento('');
+end;
+
+procedure TFrmLancamentos.img_addMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
+procedure TFrmLancamentos.img_addMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmLancamentos.img_anteriorClick(Sender: TObject);
@@ -184,14 +228,50 @@ begin
     NavegarMes(-1);
 end;
 
+procedure TFrmLancamentos.img_anteriorMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
+procedure TFrmLancamentos.img_anteriorMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
 procedure TFrmLancamentos.img_proximoClick(Sender: TObject);
 begin
     NavegarMes(1);
 end;
 
+procedure TFrmLancamentos.img_proximoMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
+procedure TFrmLancamentos.img_proximoMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
 procedure TFrmLancamentos.img_voltarClick(Sender: TObject);
 begin
     Close;
+end;
+
+procedure TFrmLancamentos.img_voltarMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLancamentos.img_voltarMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmLancamentos.AbrirLancamento(id_lancamento : string);

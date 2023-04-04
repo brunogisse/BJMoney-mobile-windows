@@ -67,9 +67,33 @@ type
       const AItem: TListViewItem);
     procedure layout_menu_logoffClick(Sender: TObject);
     procedure img_saldo_visivelClick(Sender: TObject);
+    procedure Image4MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Image4MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure lbl_todos_lancMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure lbl_todos_lancMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Label9MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Label9MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Label10MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Label10MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_fechar_menuMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_fechar_menuMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_menuMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_menuMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
 
-    procedure ListarUltimosLancamentos;
+    procedure ListarUltimosLancamentos(limit : integer; offset : Integer; condicao : string);
     procedure Dashboard;
     procedure CarregarIcone;
     procedure VisibilidadeSaldo;
@@ -245,7 +269,7 @@ begin
         lancamento := TLancamento.Create(dm.conn);
         lancamento.DATA_DE  := FormatDateTime('YYYY-MM-DD', StartOfTheMonth(Date));
         lancamento.DATA_ATE := FormatDateTime('YYYY-MM-DD', EndOfTheMonth(Date));
-        qry := lancamento.ListarLancamento(0, erro);
+        qry := lancamento.ListarLancamento(0, 0, erro);
 
         if erro <> '' then
         begin
@@ -298,7 +322,18 @@ begin
     rect_menu.Visible := True;
 end;
 
-procedure TFrmPrincipal.ListarUltimosLancamentos;
+procedure TFrmPrincipal.lv_lancamentoPaint(Sender: TObject; Canvas: TCanvas;
+  const ARect: TRectF);
+begin
+    //rolagem infinita...
+
+    if lv_lancamento.Items.Count > 0 then
+     if lv_lancamento.GetItemRect(lv_lancamento.items.Count - 2).Bottom <= lv_lancamento.Height then
+        ListarUltimosLancamentos(10, lv_lancamento.items.Count, 'rolagem');
+
+end;
+
+procedure TFrmPrincipal.ListarUltimosLancamentos(limit : integer; offset : Integer; condicao : string);
 var
     foto : TStream;
     lanc : TLancamento;
@@ -307,9 +342,11 @@ var
 begin
 
     try
-        lv_lancamento.Items.clear;
-        lanc := TLancamento.Create(dm.conn);
-        qry := lanc.ListarLancamento(0, erro);
+        if condicao <> 'rolagem' then
+           lv_lancamento.Items.clear;
+           lanc := TLancamento.Create(dm.conn);
+
+        qry := lanc.ListarLancamento(limit, offset, erro);
 
         if  erro <> '' then
         begin
@@ -346,7 +383,7 @@ end;
 
 procedure TFrmPrincipal.FormShow(Sender: TObject);
 begin
-    ListarUltimosLancamentos;
+    ListarUltimosLancamentos(10, 0, '');
     CarregarIcone;
     VisibilidadeSaldo;
 end;
@@ -360,8 +397,21 @@ if NOT Assigned(FrmLancamentosCad) then
 
            FrmLancamentosCad.ShowModal(procedure(ModalResult: TModalResult)
                   begin
-                      ListarUltimosLancamentos;
+                      ListarUltimosLancamentos(10, 0, '');
                   end);
+end;
+
+procedure TFrmPrincipal.Image4MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    //
+    image4.Opacity := 0.5;
+end;
+
+procedure TFrmPrincipal.Image4MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    image4.Opacity := 1;
 end;
 
 procedure TFrmPrincipal.VisibilidadeSaldo;
@@ -387,9 +437,45 @@ begin
     VisibilidadeSaldo;
 end;
 
+procedure TFrmPrincipal.Label10MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
+procedure TFrmPrincipal.Label10MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
+procedure TFrmPrincipal.Label9MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
+procedure TFrmPrincipal.Label9MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmPrincipal.img_fechar_menuClick(Sender: TObject);
 begin
     AnimationMenu.Start;
+end;
+
+procedure TFrmPrincipal.img_fechar_menuMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.5;
+end;
+
+procedure TFrmPrincipal.img_fechar_menuMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmPrincipal.img_menuClick(Sender: TObject);
@@ -397,6 +483,18 @@ begin
 
     AnimationMenu.Start;
 
+end;
+
+procedure TFrmPrincipal.img_menuMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmPrincipal.img_menuMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmPrincipal.layout_menu_catClick(Sender: TObject);
@@ -442,8 +540,20 @@ begin
            Application.CreateForm(TFrmLancamentos, FrmLancamentos);
            FrmLancamentos.ShowModal( procedure( ModalResult : TModalResult )
                                    begin
-                                      ListarUltimosLancamentos;
-                                   end);;
+                                      ListarUltimosLancamentos(10, 0, '');
+                                   end);
+end;
+
+procedure TFrmPrincipal.lbl_todos_lancMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.2;
+end;
+
+procedure TFrmPrincipal.lbl_todos_lancMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.7;
 end;
 
 procedure TFrmPrincipal.lv_lancamentoItemClick(const Sender: TObject;
@@ -457,24 +567,10 @@ begin
 
     FrmLancamentosCad.ShowModal( procedure( ModalResult : TModalResult )
                                    begin
-                                      ListarUltimosLancamentos;
+                                      ListarUltimosLancamentos(10, 0, '');
                                    end);
 end;
 
-procedure TFrmPrincipal.lv_lancamentoPaint(Sender: TObject; Canvas: TCanvas;
-  const ARect: TRectF);
- // var
- //   i : integer;
-begin
-  {  if lv_lancamento.Items.Count > 0 then
-
-        if lv_lancamento.GetItemRect(lv_lancamento.items.Count - 2).Bottom <= lv_lancamento.Height then
-
-            for i := lv_lancamento.items.Count + 1 to lv_lancamento.items.Count + 10 do
-
-                AddLancamento(Self.lv_lancamento ,'0000' + IntToStr(i), 'Produto ' + IntToStr(i), 'Categoria ' + IntToStr(i), -50 , date, nil);
-   }
-end;
 
 procedure TFrmPrincipal.lv_lancamentoUpdateObjects(const Sender: TObject;
   const AItem: TListViewItem);

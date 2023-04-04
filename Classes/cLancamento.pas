@@ -27,7 +27,7 @@ type
         property DESCRICAO    : string read FDESCRICAO write FDESCRICAO;
 
         function ListarResumo(qtd_result: Integer; out erro: string): TFDQuery;
-        function ListarLancamento(qtd_result : Integer; out erro : string) : TFDQuery;
+        function ListarLancamento(limit : Integer; offset : Integer; out erro : string) : TFDQuery;
         function Inserir(out erro : string) : Boolean;
         function Alterar(out erro: string): Boolean;
         function Excluir(out erro: string): Boolean;
@@ -77,7 +77,7 @@ begin
 end;
 
 
-function TLancamento.ListarLancamento(qtd_result : Integer; out erro: string): TFDQuery;
+function TLancamento.ListarLancamento(limit : Integer; offset : Integer; out erro: string): TFDQuery;
 var
     qry : TFDQuery;
 begin
@@ -112,8 +112,8 @@ begin
 
             SQL.Add('ORDER BY L.DATA DESC ');
 
-            if qtd_result > 0 then
-               SQL.Add('LIMIT ' + qtd_result.ToString);
+            if limit > 0 then
+               SQL.Add('LIMIT ' + limit.ToString + ' OFFSET ' + offset.ToString);
 
             Active := True;
         end;

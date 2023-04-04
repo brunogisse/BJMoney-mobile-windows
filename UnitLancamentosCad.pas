@@ -47,6 +47,22 @@ type
     procedure edt_valorTyping(Sender: TObject);
     procedure img_deleteClick(Sender: TObject);
     procedure lbl_categoriaClick(Sender: TObject);
+    procedure img_hojeMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_hojeMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_ontemMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_ontemMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_saveMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_saveMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_deleteMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_deleteMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
     procedure ComboCategoria;
     function TrataValor(str: string): double;
@@ -132,7 +148,7 @@ begin
         try
             lancamento := TLancamento.Create(dm.conn);
             lancamento.ID_LANCAMENTO := id_lanc;
-            qry := lancamento.ListarLancamento(0, erro);
+            qry := lancamento.ListarLancamento(0, 0, erro);
 
             if qry.RecordCount = 0 then
             begin
@@ -207,14 +223,50 @@ begin
 
 end;
 
+procedure TFrmLancamentosCad.img_deleteMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLancamentosCad.img_deleteMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmLancamentosCad.img_hojeClick(Sender: TObject);
 begin
     dt_lancamento.Date := date;
 end;
 
+procedure TFrmLancamentosCad.img_hojeMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLancamentosCad.img_hojeMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmLancamentosCad.img_ontemClick(Sender: TObject);
 begin
     dt_lancamento.Date := Date - 1;
+end;
+
+procedure TFrmLancamentosCad.img_ontemMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLancamentosCad.img_ontemMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 function TFrmLancamentosCad.TrataValor(str : string) : double ;
@@ -263,6 +315,18 @@ begin
     finally
         lancamento.DisposeOf;
     end;
+end;
+
+procedure TFrmLancamentosCad.img_saveMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLancamentosCad.img_saveMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmLancamentosCad.img_tipo_lancamentoClick(Sender: TObject);

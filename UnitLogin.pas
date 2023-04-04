@@ -79,6 +79,7 @@ type
     ActCamera: TTakePhotoFromCameraAction;
     Timer1: TTimer;
     img_rotation: TImage;
+    OpenDialog1: TOpenDialog;
     procedure label_login_contaClick(Sender: TObject);
     procedure label_login_tabContaClick(Sender: TObject);
     procedure rect_conta_proximoClick(Sender: TObject);
@@ -103,6 +104,38 @@ type
     procedure FormVirtualKeyboardHidden(Sender: TObject;
       KeyboardVisible: Boolean; const Bounds: TRect);
     procedure img_rotationClick(Sender: TObject);
+    procedure rect_conta_proximoMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure rect_conta_proximoMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure rect_loginMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure rect_loginMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure rect_criar_contaMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure rect_criar_contaMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_fotoMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_fotoMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_libraryMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure img_libraryMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure c_escolher_fotoMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure c_escolher_fotoMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure label_login_tabContaMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+    procedure label_login_tabContaMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Label6MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure Label6MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
 
   private
     { Private declarations }
@@ -155,14 +188,28 @@ begin
   ActEscolherFoto.Execute;
 end;
 
+procedure TFrmLogin.c_escolher_fotoMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.c_escolher_fotoMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmLogin.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
     Action := TCloseAction.caFree;
     FrmLogin := nil;
 end;
 
+
 procedure TFrmLogin.FormCreate(Sender: TObject);
 begin
+
   permissao := T99Permissions.Create;
 end;
 
@@ -277,6 +324,18 @@ begin
   permissao.Camera(ActCamera, TrataErroPermissao);
 end;
 
+procedure TFrmLogin.img_fotoMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.img_fotoMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmLogin.img_foto_voltarClick(Sender: TObject);
 begin
   ActConta.Execute;
@@ -284,7 +343,33 @@ end;
 
 procedure TFrmLogin.img_libraryClick(Sender: TObject);
 begin
-  permissao.PhotoLibrary(ActLibrary, TrataErroPermissao);
+
+  {$IFDEF MSWINDOWS}
+
+    if OpenDialog1.Execute then
+     begin
+        c_escolher_foto.Fill.Bitmap.Bitmap.LoadFromFile(OpenDialog1.FileName);
+        c_escolher_foto.Fill.Bitmap.Bitmap.Resize(300, 300);
+        ActFoto.Execute;
+     end;
+
+  {$ELSE}
+
+        permissao.PhotoLibrary(ActLibrary, TrataErroPermissao);
+
+  {$ENDIF}
+end;
+
+procedure TFrmLogin.img_libraryMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.img_libraryMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmLogin.img_rotationClick(Sender: TObject);
@@ -293,6 +378,18 @@ begin
        c_escolher_foto.RotationAngle := 0
     else
        c_escolher_foto.RotationAngle :=  c_escolher_foto.RotationAngle + 90;
+end;
+
+procedure TFrmLogin.Label6MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TLabel(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.Label6MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TLabel(Sender).Opacity := 1;
 end;
 
 procedure TFrmLogin.label_login_contaClick(Sender: TObject);
@@ -305,9 +402,33 @@ begin
   ActLogin.Execute;
 end;
 
+procedure TFrmLogin.label_login_tabContaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TLabel(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.label_login_tabContaMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TLabel(Sender).Opacity := 1;
+end;
+
 procedure TFrmLogin.rect_conta_proximoClick(Sender: TObject);
 begin
   ActFoto.Execute;
+end;
+
+procedure TFrmLogin.rect_conta_proximoMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.rect_conta_proximoMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 procedure TFrmLogin.rect_criar_contaClick(Sender: TObject);
@@ -345,6 +466,18 @@ begin
     AbrirFrmPrincipal;
 end;
 
+procedure TFrmLogin.rect_criar_contaMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.rect_criar_contaMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+  TImage(Sender).Opacity := 1;
+end;
+
 procedure TFrmLogin.rect_loginClick(Sender: TObject);
 var
     usuario : TUsuario;
@@ -366,6 +499,18 @@ begin
     end;
 
     AbrirFrmPrincipal;
+end;
+
+procedure TFrmLogin.rect_loginMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 0.4;
+end;
+
+procedure TFrmLogin.rect_loginMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+    TImage(Sender).Opacity := 1;
 end;
 
 end.
